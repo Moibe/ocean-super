@@ -3,7 +3,7 @@ import gradio as gr
 nombre_diccionario = "datos_superheroe"
 
 #MAIN
-version = "0.1.0"
+version = "0.2.0"
 env = "dev"
 aplicacion = "superheroes-dev" #como se llama en tu repo y tu dominio.
 
@@ -21,7 +21,7 @@ process_cost = 30
 seto = "splashmix"
 work = "picswap"
 app_path = "/superheroes-dev"
-server_port=7880
+server_port=7881
 tema = gr.themes.Default()
 flag = "never"
 
