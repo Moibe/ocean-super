@@ -116,6 +116,7 @@ def mass(input1, gender):
         # #Si viene del miniproxy, hay que rehacer la tupla.
         # result = ast.literal_eval(result)  
 
+        #Ahorita te fijas si hay que debitar antes o después de que detecta la cara.
         if tipo_api == "quota":
             print("Si era de quota, voy a debitar.")
             sulkuPypi.updateQuota(globales.process_cost)

@@ -113,7 +113,11 @@ def titulizaExcepDeAPI(e):
         resultado = "HANDSHAKE_ERROR"
     elif "File None does not exist on local filesystem and is not a valid URL." in str(e):
         resultado = "NO_FILE"
-    #A partir de aquí son casos propios de cada aplicación.
+    elif "too many values to unpack (expected 2)" in str(e): #No es lo ideal pero instantid no envía mensaje tan específico, FUTURE: tendrías que modificarlo haya y no se si lo valga. 
+        resultado = "NO_FACE"
+    #A partir de aquí son casos propios de cada aplicación, estos sirven para image-blend, pero no en splashmix!.
+    #Eso debido a que cuando splashmix no detecta un rostro, lanza éste error: 
+    #The upstream Gradio app has raised an exception: Error
     elif "Unable to detect a face" in str(e):
         resultado = "NO_FACE"
     elif "positions" in str(e):
@@ -167,7 +171,6 @@ def desTuplaResultado(resultado):
         #imagen de posición.
         try:
             #Lo pongo en try porque si no hay segmentado[1], suspende toda la operación. 
-            print("Segmentado[1] es: ", segmentado[1])
             mensaje = segmentado[1]
             return mensaje
         except Exception as e:
