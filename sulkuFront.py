@@ -3,6 +3,7 @@ import sulkuPypi
 import gradio as gr
 import threading
 import tools
+import time
 
 #import modulo_correspondiente
 mensajes, sulkuMessages = tools.get_mensajes(globales.mensajes_lang)
@@ -13,7 +14,7 @@ result_from_initAPI = None
 def displayTokens(request: gr.Request):
     
     global result_from_displayTokens
-
+    
     novelty = sulkuPypi.getNovelty(sulkuPypi.encripta(request.username).decode("utf-8"), globales.aplicacion)    
     if novelty == "new_user": 
         display = gr.Textbox(visible=False)
@@ -24,7 +25,7 @@ def displayTokens(request: gr.Request):
     result_from_displayTokens = display
 
 def precarga(request: gr.Request):
-    
+
     # global result_from_initAPI
     # global result_from_displayTokens
 

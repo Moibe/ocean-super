@@ -16,13 +16,17 @@ mensajes, sulkuMessages = tools.get_mensajes(globales.mensajes_lang)
 btn_buy = gr.Button("Get Credits", visible=False, size='lg')
 
 #PERFORM es la app INTERNA que llamará a la app externa.
-def perform(input1, gender, request: gr.Request):          
+def perform(usos, input1, gender, request: gr.Request):       
+
+    print(f"Imprimiendo: {usos}, {input1}, {gender}...")
+    time.sleep(18)   
 
     nombre_posicion = ""
     tokens = sulkuPypi.getTokens(sulkuPypi.encripta(request.username).decode("utf-8"), globales.env)
     
     #1: Reglas sobre autorización si se tiene el crédito suficiente.
-    autorizacion = sulkuPypi.authorize(tokens, globales.work)
+    autorizacion = sulkuPypi.authorize(tokens, globales.work) #Autorización vía Sulku con tokens.
+    autorizacion = True if int(usos) > 0 else False #Autorización via usos con localstorage.
     if autorizacion is True:
         try: 
             gender = gender or "superhero" #default es superhero.
@@ -34,6 +38,7 @@ def perform(input1, gender, request: gr.Request):
             return resultado, info_window, html_credits, btn_buy, nombre_posicion          
     else:
         #Si no hubo autorización.
+        #AQUÍ LLEGA CUANDO NO HAY CREDITOS O ALLOWANCE EN LOCALSTORAGE.
         info_window, resultado, html_credits = sulkuFront.noCredit(request.username)
         return resultado, info_window, html_credits, btn_buy, nombre_posicion
        
