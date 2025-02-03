@@ -16,17 +16,18 @@ mensajes, sulkuMessages = tools.get_mensajes(globales.mensajes_lang)
 btn_buy = gr.Button("Get Credits", visible=False, size='lg')
 
 #PERFORM es la app INTERNA que llamará a la app externa.
-def perform(usos, input1, gender, request: gr.Request):       
+def perform(browser_state, input1, gender, request: gr.Request):   
 
-    print(f"Imprimiendo: {usos}, {input1}, {gender}...")
-    time.sleep(18)   
+    print(f"Ésto es browser_state: ", browser_state)
+    print("Y eso es browserState['usos']:", browser_state["usos"])
 
     nombre_posicion = ""
-    tokens = sulkuPypi.getTokens(sulkuPypi.encripta(request.username).decode("utf-8"), globales.env)
+    #***Importante: Removido aquí porque no requiere auth.
+    #tokens = sulkuPypi.getTokens(sulkuPypi.encripta(request.username).decode("utf-8"), globales.env)
     
     #1: Reglas sobre autorización si se tiene el crédito suficiente.
-    autorizacion = sulkuPypi.authorize(tokens, globales.work) #Autorización vía Sulku con tokens.
-    autorizacion = True if int(usos) > 0 else False #Autorización via usos con localstorage.
+    #autorizacion = sulkuPypi.authorize(tokens, globales.work) #Autorización vía Sulku con tokens.
+    autorizacion = True if int(browser_state["usos"]) > 0 else False #Autorización via usos con localstorage.
     if autorizacion is True:
         try: 
             gender = gender or "superhero" #default es superhero.
@@ -34,25 +35,26 @@ def perform(usos, input1, gender, request: gr.Request):
             #El resultado ya viene destuplado.
         except Exception as e:
             print("Excepción en mass: ", e)                     
-            info_window, resultado, html_credits = sulkuFront.aError(request.username, tokens, excepcion = tools.titulizaExcepDeAPI(e))
-            return resultado, info_window, html_credits, btn_buy, nombre_posicion          
+            info_window, resultado = sulkuFront.aError(excepcion = tools.titulizaExcepDeAPI(e))
+            return resultado, info_window, btn_buy, nombre_posicion         
     else:
         #Si no hubo autorización.
         #AQUÍ LLEGA CUANDO NO HAY CREDITOS O ALLOWANCE EN LOCALSTORAGE.
-        info_window, resultado, html_credits = sulkuFront.noCredit(request.username)
-        return resultado, info_window, html_credits, btn_buy, nombre_posicion
+        info_window, resultado = sulkuFront.noCredit()
+        return resultado, info_window, btn_buy, nombre_posicion
        
     #Primero revisa si es imagen!: 
     if "image.webp" in resultado:
         #Si es imagen, debitarás.
-        html_credits, info_window = sulkuFront.presentacionFinal(request.username, "debita")
+        #html_credits, info_window = sulkuFront.presentacionFinal(request.username, "debita") #Importante: no con usos.
+        browser_state, info_window = sulkuFront.presentacionFinalUsos(browser_state, "debita")
     else: 
         #Si no es imagen es un texto que nos dice algo.
-        info_window, resultado, html_credits = sulkuFront.aError(request.username, tokens, excepcion = resultado)
-        return resultado, info_window, html_credits, btn_buy, nombre_posicion           
+        info_window, resultado = sulkuFront.aError(excepcion = resultado)
+        return resultado, info_window, btn_buy, nombre_posicion          
            
     #Lo que se le regresa oficialmente al entorno.
-    return resultado, info_window, html_credits, btn_buy, nombre_posicion
+    return resultado, info_window, btn_buy, nombre_posicion
 
 #MASS es la que ejecuta la aplicación EXTERNA
 def mass(input1, gender):

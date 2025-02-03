@@ -24,13 +24,35 @@ def displayTokens(request: gr.Request):
     
     result_from_displayTokens = display
 
-def precarga(request: gr.Request):
+def displayUsos(browser_state):
+
+    global result_from_displayTokens 
+
+    print("Ésto es browserstate en la primera revisión: ", browser_state)
+    time.sleep(1)
+
+    if browser_state["usos"] == '': 
+        #Si está vacio es que és el primer uso, y por lo tanto crearemos su carga con 10 usos.
+        print("No existía, cargué 10...")
+        display = {"usos": 10}
+    else: 
+        #Si ya existía, dejalo intacto.
+        print("Si existía, lo dejé tal")
+        display = browser_state
+
+    print("Hice el IF correspondiente, ahora este es el browserstate que quedó: ")
+    print(display)      
+
+    result_from_displayTokens = display
+
+def precarga(browser_state, request: gr.Request):
 
     # global result_from_initAPI
     # global result_from_displayTokens
 
     #thread1 = threading.Thread(target=initAPI)
-    thread2 = threading.Thread(target=displayTokens, args=(request,))
+    #thread2 = threading.Thread(target=displayTokens, args=(request,)) #Ésta es la precarga cuando se usa Sulku.
+    thread2 = threading.Thread(target=displayUsos, args=(browser_state,))
 
     #thread1.start()
     thread2.start()
@@ -52,20 +74,19 @@ def visualizar_creditos(nuevos_creditos, usuario):
     return html_credits
 
 #Controla lo que se depliega en el frontend y que tiene que ver con llamados a Sulku.
-def noCredit(usuario):
+def noCredit(usuario=None):
     info_window = sulkuMessages.out_of_credits
     path = 'images/no-credits.png'
-    tokens = 0
-    html_credits = visualizar_creditos(tokens, usuario)
-    return info_window, path, html_credits
+    #tokens = 0
+    #html_credits = visualizar_creditos(tokens, usuario) #Impotante no se usa si no hay auth.
+    return info_window, path
 
-def aError(usuario, tokens, excepcion):
+def aError(excepcion, usuario=None, tokens=None):
     #aError se usa para llenar todos los elementos visuales en el front.
     info_window = manejadorExcepciones(excepcion)
     path = 'images/error.png'
-    tokens = tokens
-    html_credits = visualizar_creditos(tokens, usuario)   
-    return info_window, path, html_credits
+    #html_credits = visualizar_creditos(tokens, usuario)  #Ya no se trabajará con html_credits cuando no hay auth. 
+    return info_window, path
 
 def manejadorExcepciones(excepcion):
     #El parámetro que recibe es el texto despliega ante determinada excepción:
@@ -106,3 +127,15 @@ def presentacionFinal(usuario, accion):
     html_credits = visualizar_creditos(tokens, usuario)       
     
     return html_credits, info_window
+
+def presentacionFinalUsos(browser_state, accion):        
+    
+    if accion == "debita":        
+        usos_actuales = browser_state["usos"]
+        usos_updated = usos_actuales - 1
+        browser_state["usos"] = usos_updated
+        info_window = sulkuMessages.result_ok        
+    else: 
+        info_window = "No face in source path detected."  
+    
+    return browser_state, info_window
