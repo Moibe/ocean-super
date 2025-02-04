@@ -28,9 +28,6 @@ def displayUsos(browser_state):
 
     global result_from_displayTokens 
 
-    print("Ésto es browserstate en la primera revisión: ", browser_state)
-    time.sleep(1)
-
     if browser_state["usos"] == '': 
         #Si está vacio es que és el primer uso, y por lo tanto crearemos su carga con 10 usos.
         print("No existía, cargué 10...")
@@ -38,10 +35,7 @@ def displayUsos(browser_state):
     else: 
         #Si ya existía, dejalo intacto.
         print("Si existía, lo dejé tal")
-        display = browser_state
-
-    print("Hice el IF correspondiente, ahora este es el browserstate que quedó: ")
-    print(display)      
+        display = browser_state  
 
     result_from_displayTokens = display
 

@@ -1,6 +1,6 @@
 result_ok = "Image Ready." #Future que el texto de result ok, sea globales para q se relacione con la app en cuestión.
 
-out_of_credits = "Sin créditos..."
+out_of_credits = "Thank you for trying out the app! Look out for it soon..."
 
 PAUSED = "AI Engine Paused, ready soon."
 RUNTIME_ERROR= "Error building AI environment, please contact me."

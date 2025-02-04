@@ -18,9 +18,6 @@ btn_buy = gr.Button("Get Credits", visible=False, size='lg')
 #PERFORM es la app INTERNA que llamará a la app externa.
 def perform(browser_state, input1, gender, request: gr.Request):   
 
-    print(f"Ésto es browser_state: ", browser_state)
-    print("Y eso es browserState['usos']:", browser_state["usos"])
-
     nombre_posicion = ""
     #***Importante: Removido aquí porque no requiere auth.
     #tokens = sulkuPypi.getTokens(sulkuPypi.encripta(request.username).decode("utf-8"), globales.env)

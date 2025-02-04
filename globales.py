@@ -3,7 +3,7 @@ import gradio as gr
 nombre_diccionario = "datos_superheroe"
 
 #MAIN
-version = "1.4.2"
+version = "2.5.3"
 env = "dev"
 aplicacion = "super-dev" #como se llama en tu repo y tu dominio.
 
