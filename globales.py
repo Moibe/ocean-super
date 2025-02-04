@@ -3,9 +3,9 @@ import gradio as gr
 nombre_diccionario = "datos_superheroe"
 
 #MAIN
-version = "2.4.3"
-env = "dev"
-aplicacion = "super-dev" #como se llama en tu repo y tu dominio.
+version = "0.0.0"
+env = "prod"
+aplicacion = "super" #como se llama en tu repo y tu dominio.
 
 seleccion_api = "eligeQuotaOCosto" #eligeQuotaOCosto , eligeAOB o eligeGratisOCosto
 max_size = 20
@@ -20,10 +20,10 @@ process_cost = 30
 
 seto = "splashmix"
 work = "picswap"
-app_path = "/super-dev"
-server_port=7881
+app_path = "/super"
+server_port=7889
 tema = gr.themes.Default()
-flag = "never"
+flag = "auto"
 
 neural_wait = 6
 mensajes_lang = "en"
